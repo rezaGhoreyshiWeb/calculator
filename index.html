@@ -13,10 +13,13 @@
   </head>
   <body>
     <main class="w-screen h-screen">
-      <section class="bg-neutral-50 w-full h-full">
-        <div class="flex justify-center items-center py-5 border">
+      <section class="bg-neutral-50 w-full h-full grid grid-cols-1 grid-rows-6">
+        <!-- switch keys -->
+        <div
+          class="row-span-1 col-span-1 flex justify-center items-center py-5 border"
+        >
           <div
-            class="w-20 px-2 py-1 flex  justify-between items-center rounded-md bg-neutral-200"
+            class="w-20 px-2 py-1 flex justify-between items-center rounded-md bg-neutral-200"
           >
             <span class="material-icons text-xs text-neutral-800"
               >wb_sunny</span
@@ -26,6 +29,10 @@
             </span>
           </div>
         </div>
+        <!-- calculator result -->
+        <div class="row-span-1 col-span-1 bg-slate-400"></div>
+        <!-- calculator buttons -->
+        <div class="row-span-4 col-span-1 bg-cyan-200"></div>
       </section>
     </main>
     <script src="./component/index.js" type="module"></script>
