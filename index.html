@@ -15,9 +15,7 @@
     <main class="w-screen h-screen">
       <section class="bg-neutral-50 w-full h-full grid grid-cols-1 grid-rows-6">
         <!-- switch keys -->
-        <div
-          class="row-span-1 col-span-1 flex justify-center items-center border"
-        >
+        <div class="row-span-1 col-span-1 flex justify-center items-center">
           <div
             class="w-24 px-2 py-1 flex justify-between items-center rounded-md bg-neutral-100 shadow-sm"
           >
@@ -30,7 +28,20 @@
           </div>
         </div>
         <!-- calculator result -->
-        <div class="row-span-1 col-span-1 bg-slate-400"></div>
+        <div class="row-span-1 col-span-1 grid grid-cols-1 grid-rows-3">
+          <div
+            class="col-span-1 row-span-1 text-right px-4 space-x-2 font-medium py-2"
+          >
+            <span class="font-sans text-neutral-700">123</span>
+            <span class="font-sans text-orange-400">x</span>
+            <span class="font-sans text-neutral-700">159</span>
+          </div>
+          <div
+            class="row-span-2 col-span-1 text-right px-4 text-3xl font-bold py-4"
+          >
+            <span class="font-sans text-neutral-700">123456</span>
+          </div>
+        </div>
         <!-- calculator buttons -->
         <div class="row-span-4 col-span-1 bg-cyan-200"></div>
       </section>
