@@ -28,6 +28,7 @@ function actionsChecker(value) {
   const lastIndexOfActionsArray = actionsArray.length - 1;
   const lastItemOfActionsArray = actionsArray[lastIndexOfActionsArray];
   console.log(value);
+  // bracket check
   if (value.includes("(")) {
     if (lastItemOfActionsArray === ")") return;
     if (bracketRight && lastItemOfActionsArray !== "(") {
@@ -37,9 +38,11 @@ function actionsChecker(value) {
       return;
     }
     if (!bracketRight) {
-      actionsArray.push("(");
-      bracketRight = true;
-      console.log(actionsArray);
+      if (actionsArray.length === 0 || isNaN(lastItemOfActionsArray)) {
+        actionsArray.push("(");
+        bracketRight = true;
+        console.log(actionsArray);
+      }
       return;
     }
   }
@@ -89,7 +92,6 @@ function actionsChecker(value) {
     return;
   }
 }
-
 
 function showActions() {
   calculatesEl.classList.remove("hidden");
