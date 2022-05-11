@@ -38,7 +38,8 @@
         <!-- calculator result -->
         <div class="row-span-1 col-span-1 grid grid-cols-1 grid-rows-3">
           <div
-            class="col-span-1 row-span-1 text-right px-4 space-x-2 font-medium py-2"
+            id="calculates"
+            class="hidden col-span-1 row-span-1 text-right px-4 space-x-2 font-medium py-2"
           >
             <span class="font-sans text-neutral-700 dark:text-gray-50"
               >123</span
@@ -49,13 +50,10 @@
             >
           </div>
           <div
+            id="result"
             class="row-span-2 col-span-1 text-right px-4 text-3xl font-bold py-4"
           >
-            <span
-              id="result"
-              class="font-sans text-neutral-700 dark:text-gray-50"
-              >0</span
-            >
+            <span class="font-sans text-neutral-700 dark:text-gray-50">0</span>
           </div>
         </div>
         <!-- calculator buttons -->
@@ -63,8 +61,9 @@
           class="row-span-4 col-span-1 bg-gray-100 rounded-t-3xl grid grid-cols-4 grid-rows-5 gap-2 px-5 py-7 dark:bg-slate-700"
         >
           <div
+            id="clear"
             data-value="c"
-            class="actions col-span-1 row-span-1 flex justify-center items-center bg-gray-50 text-rose-500 rounded-xl shadow-sm font-medium text-2xl cursor-pointer hover:border hover:border-rose-400 dark:bg-slate-800"
+            class="col-span-1 row-span-1 flex justify-center items-center bg-gray-50 text-rose-500 rounded-xl shadow-sm font-medium text-2xl cursor-pointer hover:border hover:border-rose-400 dark:bg-slate-800"
           >
             <p>C</p>
           </div>
@@ -75,16 +74,18 @@
             <p>( )</p>
           </div>
           <div
-            data-value="%"
-            class="actions col-span-1 row-span-1 flex justify-center items-center bg-gray-50 text-emerald-500 rounded-xl shadow-sm font-medium text-2xl cursor-pointer hover:border hover:border-emerald-400 dark:bg-slate-800"
-          >
-            <p>%</p>
-          </div>
-          <div
             data-value="/"
             class="actions col-span-1 row-span-1 flex justify-center items-center bg-gray-50 text-emerald-500 rounded-xl shadow-sm font-medium text-2xl cursor-pointer hover:border hover:border-emerald-400 dark:bg-slate-800"
           >
             <p>÷</p>
+          </div>
+          <div
+            id="remove"
+            class=" col-span-1 row-span-1 flex justify-center items-center bg-gray-50 text-emerald-500 rounded-xl shadow-sm font-medium text-2xl cursor-pointer hover:border hover:border-emerald-400 dark:bg-slate-800"
+          >
+            <span class="material-icons text-gray-800 dark:text-gray-100">
+              backspace
+            </span>
           </div>
           <div
             data-value="7"
