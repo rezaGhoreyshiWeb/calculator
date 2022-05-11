@@ -9,7 +9,7 @@ const clearEl = document.getElementById("clear");
 // declared variables
 let bracketRight = false;
 let num;
-let actionsArray = [];
+const actionsArray = [];
 
 // events
 switcherEl.addEventListener("click", switcherTheme);
@@ -25,10 +25,12 @@ actionsEl.forEach((el) =>
 // functions
 
 function actionsChecker(value) {
+  const lastIndexOfActionsArray = actionsArray.length - 1;
+  const lastItemOfActionsArray = actionsArray[lastIndexOfActionsArray];
   console.log(value);
   if (value.includes("(")) {
-    if (actionsArray[actionsArray.length - 1] === ")") return;
-    if (bracketRight && actionsArray[actionsArray.length - 1] !== "(") {
+    if (lastItemOfActionsArray === ")") return;
+    if (bracketRight && lastItemOfActionsArray !== "(") {
       actionsArray.push(")");
       bracketRight = false;
     }
@@ -36,6 +38,25 @@ function actionsChecker(value) {
       actionsArray.push("(");
       bracketRight = true;
     }
+    return;
+  }
+
+  if (!isNaN(value)) {
+    if (
+      !isNaN(lastItemOfActionsArray) ||
+      lastItemOfActionsArray?.includes(".")
+    ) {
+      actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
+      return;
+    }
+    actionsArray.push(value);
+  }
+  if (
+    !isNaN(lastItemOfActionsArray) &&
+    lastItemOfActionsArray &&
+    !lastItemOfActionsArray?.includes(".")
+  ) {
+    actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
   }
 
   console.log(actionsArray);
