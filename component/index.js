@@ -33,12 +33,15 @@ function actionsChecker(value) {
     if (bracketRight && lastItemOfActionsArray !== "(") {
       actionsArray.push(")");
       bracketRight = false;
+      console.log(actionsArray);
+      return;
     }
     if (!bracketRight) {
       actionsArray.push("(");
       bracketRight = true;
+      console.log(actionsArray);
+      return;
     }
-    return;
   }
   // number check
   if (!isNaN(value)) {
@@ -52,6 +55,7 @@ function actionsChecker(value) {
     }
     actionsArray.push(value);
     console.log(actionsArray);
+    return;
   }
   // decimal check
   if (value === ".") {
@@ -78,8 +82,14 @@ function actionsChecker(value) {
     return;
   }
 
-  console.log(actionsArray);
+  // for any other actions
+  if (!isNaN(lastItemOfActionsArray) || lastItemOfActionsArray === ")") {
+    actionsArray.push(value);
+    console.log(actionsArray);
+    return;
+  }
 }
+
 
 function showActions() {
   calculatesEl.classList.remove("hidden");
