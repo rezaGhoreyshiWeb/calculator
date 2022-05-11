@@ -5,9 +5,12 @@ const switcherEl = document.getElementById("switcher");
 const actionsEl = document.querySelectorAll(".actions");
 const calculatesEl = document.getElementById("calculates");
 const clearEl = document.getElementById("clear");
+const removeEl = document.getElementById("remove");
 
 // declared variables
+let bracketLeft = true;
 let bracketRight = false;
+let removeAction = false;
 let lastIndexOfActionsArray;
 let lastItemOfActionsArray;
 let actionsArray = [];
@@ -24,7 +27,7 @@ actionsEl.forEach((el) =>
   })
 );
 clearEl.addEventListener("click", clear);
-
+removeEl.addEventListener("click", remove);
 // functions
 
 function finedLastIndexAndItem() {
@@ -34,20 +37,30 @@ function finedLastIndexAndItem() {
 
 function actionsChecker(value) {
   finedLastIndexAndItem();
+   removeAction = false;
 
   // bracket check
   if (value.includes("(")) {
     if (lastItemOfActionsArray === ")") return;
-    if (bracketRight && lastItemOfActionsArray !== "(") {
+    console.log('bracket');
+    console.log(actionsArray);
+    if (
+      bracketRight &&
+      lastItemOfActionsArray !== "(" &&
+      !isNaN(lastItemOfActionsArray)
+    ) {
+      console.log('bracket push to array');
       actionsArray.push(")");
       bracketRight = false;
+      bracketLeft = true;
       showActions();
 
       return;
     }
-    if (!bracketRight) {
+    if (bracketLeft) {
       if (actionsArray.length === 0 || isNaN(lastItemOfActionsArray)) {
         actionsArray.push("(");
+        bracketLeft = false
         bracketRight = true;
         showActions();
       }
@@ -72,11 +85,10 @@ function actionsChecker(value) {
   }
   // decimal check
   if (value === ".") {
-    if (
-      !isNaN(lastItemOfActionsArray) &&
-      lastItemOfActionsArray &&
-      !lastItemOfActionsArray?.includes(".")
-    ) {
+    if (lastItemOfActionsArray.includes(".")) {
+      return;
+    }
+    if (!isNaN(lastItemOfActionsArray) && lastItemOfActionsArray) {
       actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
       showActions();
 
@@ -100,9 +112,9 @@ function actionsChecker(value) {
 
   // for any other actions
   if (!isNaN(lastItemOfActionsArray) || lastItemOfActionsArray === ")") {
+    console.log('other');
     actionsArray.push(value);
     showActions();
-
     return;
   }
 }
@@ -110,32 +122,48 @@ function actionsChecker(value) {
 function showActions() {
   finedLastIndexAndItem();
   const lastHtmlItem = actionsHTMLArray[actionsHTMLArray.length - 1];
-  let HTML;
   let HTMLObj;
 
   if (calculatesEl.classList.contains("hidden")) {
     calculatesEl.classList.remove("hidden");
   }
+  if (actionsArray.length === 0) {
+    calculatesEl.classList.add("hidden");
+    return;
+  }
+
   if (!isNaN(lastItemOfActionsArray)) {
-    if (lastHtmlItem.isNaN) {
+    if (lastHtmlItem?.isNum) {
       actionsHTMLArray.pop();
     }
     HTMLObj = {
-      isNaN: true,
+      isNum: true,
       html: `
     <span class="font-sans text-neutral-700 dark:text-gray-50">${lastItemOfActionsArray}</span
     `,
     };
   }
+
   if (isNaN(lastItemOfActionsArray)) {
-    HTMLObj = {
-      isNaN: false,
-      html: `
-      <span class="font-sans text-orange-400">${lastItemOfActionsArray}</span>
-      `,
-    };
+    if (removeAction) {
+      HTMLObj = null;
+      
+    } else {
+      HTMLObj = {
+        isNum: false,
+        html: `
+        <span class="font-sans text-orange-400">${lastItemOfActionsArray}</span>
+        `,
+      };
+    }
   }
-  actionsHTMLArray.push(HTMLObj);
+  
+  if (HTMLObj) {
+   
+    actionsHTMLArray.push(HTMLObj);
+  }
+  console.log(actionsHTMLArray);
+  console.log(actionsArray);
 
   calculatesEl.innerHTML = "";
   actionsHTMLArray.forEach((item) => {
@@ -149,4 +177,55 @@ function clear() {
   bracketRight = false;
 
   calculatesEl.classList.add("hidden");
+}
+
+function remove() {
+  finedLastIndexAndItem();
+  removeAction = true;
+  if (!isNaN(lastItemOfActionsArray)) {
+    console.log("come");
+    let numArray = lastItemOfActionsArray.split("");
+    if (numArray.length > 1) {
+      numArray.pop();
+      actionsArray.pop();
+      actionsArray.push(numArray.join(""));
+      showActions();
+      console.log(actionsArray);
+      console.log(actionsHTMLArray);
+      return;
+    } else {
+      actionsArray.pop();
+      actionsHTMLArray.pop();
+      showActions();
+      console.log(actionsArray);
+      console.log(actionsHTMLArray);
+      return;
+    }
+  }
+  if (lastItemOfActionsArray === "(") {
+    bracketLeft = true
+    bracketRight = false;
+    actionsArray.pop();
+    actionsHTMLArray.pop();
+    showActions();
+    console.log(actionsArray);
+    console.log(actionsHTMLArray);
+    return;
+  }
+  if (lastItemOfActionsArray === ")") {
+    bracketLeft = false;
+    bracketRight = true;
+    actionsArray.pop();
+    actionsHTMLArray.pop();
+    showActions();
+    console.log(actionsArray);
+    console.log(actionsHTMLArray);
+    return;
+  }
+
+  actionsArray.pop();
+  actionsHTMLArray.pop();
+  showActions();
+  console.log(actionsArray);
+  console.log(actionsHTMLArray);
 }
