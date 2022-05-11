@@ -7,7 +7,7 @@ const calculatesEl = document.getElementById("calculates");
 const clearEl = document.getElementById("clear");
 
 // declared variables
-let bracket;
+let bracketRight = false;
 let num;
 let actionsArray = [];
 
@@ -25,7 +25,20 @@ actionsEl.forEach((el) =>
 // functions
 
 function actionsChecker(value) {
-  showActions();
+  console.log(value);
+  if (value.includes("(")) {
+    if (actionsArray[actionsArray.length - 1] === ")") return;
+    if (bracketRight && actionsArray[actionsArray.length - 1] !== "(") {
+      actionsArray.push(")");
+      bracketRight = false;
+    }
+    if (!bracketRight) {
+      actionsArray.push("(");
+      bracketRight = true;
+    }
+  }
+
+  console.log(actionsArray);
 }
 
 function showActions() {
