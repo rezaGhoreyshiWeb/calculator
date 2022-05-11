@@ -10,8 +10,8 @@ const clearEl = document.getElementById("clear");
 let bracketRight = false;
 let lastIndexOfActionsArray;
 let lastItemOfActionsArray;
-const actionsArray = [];
-const actionsHTMLArray = [];
+let actionsArray = [];
+let actionsHTMLArray = [];
 
 // events
 switcherEl.addEventListener("click", switcherTheme);
@@ -23,6 +23,7 @@ actionsEl.forEach((el) =>
     actionsChecker(value);
   })
 );
+clearEl.addEventListener("click", clear);
 
 // functions
 
@@ -140,4 +141,12 @@ function showActions() {
   actionsHTMLArray.forEach((item) => {
     calculatesEl.innerHTML += item.html;
   });
+}
+
+function clear() {
+  actionsArray = [];
+  actionsHTMLArray = [];
+  bracketRight = false;
+
+  calculatesEl.classList.add("hidden");
 }
