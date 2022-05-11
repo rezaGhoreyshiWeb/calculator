@@ -8,7 +8,6 @@ const clearEl = document.getElementById("clear");
 
 // declared variables
 let bracketRight = false;
-let num;
 const actionsArray = [];
 
 // events
