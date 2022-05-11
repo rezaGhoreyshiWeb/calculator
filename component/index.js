@@ -40,23 +40,42 @@ function actionsChecker(value) {
     }
     return;
   }
-
+  // number check
   if (!isNaN(value)) {
     if (
       !isNaN(lastItemOfActionsArray) ||
       lastItemOfActionsArray?.includes(".")
     ) {
       actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
+      console.log(actionsArray);
       return;
     }
     actionsArray.push(value);
+    console.log(actionsArray);
   }
-  if (
-    !isNaN(lastItemOfActionsArray) &&
-    lastItemOfActionsArray &&
-    !lastItemOfActionsArray?.includes(".")
-  ) {
-    actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
+  // decimal check
+  if (value === ".") {
+    if (
+      !isNaN(lastItemOfActionsArray) &&
+      lastItemOfActionsArray &&
+      !lastItemOfActionsArray?.includes(".")
+    ) {
+      actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
+      console.log(actionsArray);
+      return;
+    }
+  }
+
+  // number sign check
+  if (value === "+/-") {
+    if (lastItemOfActionsArray.startsWith("-")) {
+      actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray.slice(1);
+      console.log(actionsArray);
+      return;
+    }
+    actionsArray[lastIndexOfActionsArray] = "-" + lastItemOfActionsArray;
+    console.log(actionsArray);
+    return;
   }
 
   console.log(actionsArray);
