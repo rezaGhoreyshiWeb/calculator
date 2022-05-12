@@ -7,6 +7,7 @@ const calculatesEl = document.getElementById("calculates");
 const clearEl = document.getElementById("clear");
 const removeEl = document.getElementById("remove");
 const calculateResultEl = document.getElementById("calculate-result");
+const resultEl = document.getElementById("result");
 
 // declared variables
 let bracketLeft = true;
@@ -368,12 +369,13 @@ function calculateOperators(operator, numbers) {
 
 function calculateResult() {
   const simpleArray = calculatesActionsInsideTheBrackets(actionsArray);
- 
+
   const finalResult = findOrderOfOperatorsThenCalculate(simpleArray);
-  
+
   return finalResult;
 }
 
 function showResult() {
   const result = calculateResult();
+  resultEl.textContent = result;
 }
