@@ -240,7 +240,7 @@ function findAllBracketsIndexes() {
 function calculatesActionsInsideTheBrackets(array) {
   let copyActionsArray;
   let bracketIndexInfo = findAllBracketsIndexes();
-  if (!bracketIndexInfo.hasBracket) return array;
+  if (!bracketIndexInfo.hasBracket) return [...array];
   if (bracketIndexInfo.hasBracket) {
     let bracketsIndex;
     const bracketsIndexesSeparate = [];
