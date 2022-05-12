@@ -33,9 +33,6 @@ removeEl.addEventListener("click", remove);
 calculateResultEl.addEventListener("click", showResult);
 // functions
 
-function makeCopyOfActionArray() {
-  copyActionArray = [...actionsArray];
-}
 
 function finedLastIndexAndItem() {
   lastIndexOfActionsArray = actionsArray.length - 1;
