@@ -6,6 +6,7 @@ const actionsEl = document.querySelectorAll(".actions");
 const calculatesEl = document.getElementById("calculates");
 const clearEl = document.getElementById("clear");
 const removeEl = document.getElementById("remove");
+const calculateResultEl = document.getElementById("calculate-result");
 
 // declared variables
 let bracketLeft = true;
@@ -28,7 +29,12 @@ actionsEl.forEach((el) =>
 );
 clearEl.addEventListener("click", clear);
 removeEl.addEventListener("click", remove);
+calculateResultEl.addEventListener("click", showResult);
 // functions
+
+function makeCopyOfActionArray() {
+  copyActionArray = [...actionsArray];
+}
 
 function finedLastIndexAndItem() {
   lastIndexOfActionsArray = actionsArray.length - 1;
@@ -37,19 +43,16 @@ function finedLastIndexAndItem() {
 
 function actionsChecker(value) {
   finedLastIndexAndItem();
-   removeAction = false;
+  removeAction = false;
 
   // bracket check
   if (value.includes("(")) {
     if (lastItemOfActionsArray === ")") return;
-    console.log('bracket');
-    console.log(actionsArray);
     if (
       bracketRight &&
       lastItemOfActionsArray !== "(" &&
       !isNaN(lastItemOfActionsArray)
     ) {
-      console.log('bracket push to array');
       actionsArray.push(")");
       bracketRight = false;
       bracketLeft = true;
@@ -60,7 +63,7 @@ function actionsChecker(value) {
     if (bracketLeft) {
       if (actionsArray.length === 0 || isNaN(lastItemOfActionsArray)) {
         actionsArray.push("(");
-        bracketLeft = false
+        bracketLeft = false;
         bracketRight = true;
         showActions();
       }
@@ -112,7 +115,6 @@ function actionsChecker(value) {
 
   // for any other actions
   if (!isNaN(lastItemOfActionsArray) || lastItemOfActionsArray === ")") {
-    console.log('other');
     actionsArray.push(value);
     showActions();
     return;
@@ -147,7 +149,6 @@ function showActions() {
   if (isNaN(lastItemOfActionsArray)) {
     if (removeAction) {
       HTMLObj = null;
-      
     } else {
       HTMLObj = {
         isNum: false,
@@ -157,13 +158,10 @@ function showActions() {
       };
     }
   }
-  
+
   if (HTMLObj) {
-   
     actionsHTMLArray.push(HTMLObj);
   }
-  console.log(actionsHTMLArray);
-  console.log(actionsArray);
 
   calculatesEl.innerHTML = "";
   actionsHTMLArray.forEach((item) => {
@@ -174,6 +172,10 @@ function showActions() {
 function clear() {
   actionsArray = [];
   actionsHTMLArray = [];
+  removeAction = false;
+  lastIndexOfActionsArray = null;
+  lastItemOfActionsArray = null;
+  bracketLeft = true;
   bracketRight = false;
 
   calculatesEl.classList.add("hidden");
@@ -183,33 +185,29 @@ function remove() {
   finedLastIndexAndItem();
   removeAction = true;
   if (!isNaN(lastItemOfActionsArray)) {
-    console.log("come");
     let numArray = lastItemOfActionsArray.split("");
     if (numArray.length > 1) {
       numArray.pop();
       actionsArray.pop();
       actionsArray.push(numArray.join(""));
       showActions();
-      console.log(actionsArray);
-      console.log(actionsHTMLArray);
+
       return;
     } else {
       actionsArray.pop();
       actionsHTMLArray.pop();
       showActions();
-      console.log(actionsArray);
-      console.log(actionsHTMLArray);
+
       return;
     }
   }
   if (lastItemOfActionsArray === "(") {
-    bracketLeft = true
+    bracketLeft = true;
     bracketRight = false;
     actionsArray.pop();
     actionsHTMLArray.pop();
     showActions();
-    console.log(actionsArray);
-    console.log(actionsHTMLArray);
+
     return;
   }
   if (lastItemOfActionsArray === ")") {
@@ -218,14 +216,164 @@ function remove() {
     actionsArray.pop();
     actionsHTMLArray.pop();
     showActions();
-    console.log(actionsArray);
-    console.log(actionsHTMLArray);
+
     return;
   }
 
   actionsArray.pop();
   actionsHTMLArray.pop();
   showActions();
-  console.log(actionsArray);
-  console.log(actionsHTMLArray);
+}
+
+function findAllBracketsIndexes() {
+  const bracketsIndex = [];
+  actionsArray.forEach((item, index) => {
+    if (item === "(" || item === ")") {
+      bracketsIndex.push(index);
+    }
+  });
+  return {
+    hasBracket: bracketsIndex.length > 0 ? true : false,
+    isOdd: bracketsIndex.length % 2 != 0,
+    bracketsIndex,
+  };
+}
+
+function calculatesActionsInsideTheBrackets(array) {
+  let copyActionsArray;
+  let bracketIndexInfo = findAllBracketsIndexes();
+  if (!bracketIndexInfo.hasBracket) return array;
+  if (bracketIndexInfo.hasBracket) {
+    let bracketsIndex;
+    const bracketsIndexesSeparate = [];
+    let bracketsObjs = [];
+
+    if (bracketIndexInfo.isOdd) {
+      actionsArray.push(")");
+      showActions();
+      bracketIndexInfo = findAllBracketsIndexes();
+    }
+    bracketsIndex = bracketIndexInfo.bracketsIndex;
+
+    if (bracketsIndex.length > 2) {
+      // separate the pair indexes
+      for (let i = 0; i < bracketsIndex.length; i += 2) {
+        let index = i;
+        const lowestIndex = bracketsIndex[index];
+        const highestIndex = bracketsIndex[++index];
+        bracketsIndexesSeparate.push([lowestIndex, highestIndex]);
+      }
+      // get the actions inside the bracket and create the obj of them
+      bracketsIndexesSeparate.forEach((item) => {
+        const obj = {
+          lowestIndex: item[0],
+          highestIndex: item[1],
+          action: actionsArray.slice(++item[0], item[1]),
+        };
+
+        bracketsObjs.push(obj);
+      });
+    } else {
+      const obj = {
+        lowestIndex: bracketsIndex[0],
+        highestIndex: bracketsIndex[1],
+        action: actionsArray.slice(++bracketsIndex[0], bracketsIndex[1]),
+      };
+      bracketsObjs.push(obj);
+    }
+
+    // change the obj and get the result of actions
+    bracketsObjs = bracketsObjs.map((obj) => {
+      return {
+        lowestIndex: obj.lowestIndex,
+        highestIndex: obj.highestIndex,
+        result: findOrderOfOperatorsThenCalculate(obj.action),
+      };
+    });
+
+    // make a copy of action array and replace the results of brackets
+    copyActionsArray = [...array];
+    // we reverse it and start from the end of arr to don't change the indexes
+    bracketsObjs = bracketsObjs.reverse();
+    // replace array with results of brackets
+    bracketsObjs.forEach((obj) => {
+      replaceInArray(
+        copyActionsArray,
+        obj.lowestIndex,
+        obj.highestIndex,
+        obj.result
+      );
+    });
+
+    return copyActionsArray;
+  }
+}
+
+function findOrderOfOperatorsThenCalculate(array = []) {
+  let actionArray = array;
+  let indexOfMultiplyOrDivide;
+  let indexOfAddingOrSubtraction;
+
+  // for calculating * and /
+  do {
+    // for calculating * and /
+    indexOfMultiplyOrDivide = actionArray.findIndex(
+      (element) => element === "x" || element === "÷"
+    );
+    if (indexOfMultiplyOrDivide > -1) {
+      const operator = actionArray[indexOfMultiplyOrDivide];
+      const numOne = actionArray[--indexOfMultiplyOrDivide];
+      const lowestIndex = indexOfMultiplyOrDivide;
+      const numTwo = actionArray[(indexOfMultiplyOrDivide += 2)];
+      const highestIndex = indexOfMultiplyOrDivide;
+      const result = calculateOperators(operator, [numOne, numTwo]);
+      replaceInArray(actionArray, lowestIndex, highestIndex, result);
+    }
+    // for calculating -  and  +
+
+    indexOfAddingOrSubtraction = actionArray.findIndex(
+      (element) => element === "-" || element === "+"
+    );
+    if (indexOfMultiplyOrDivide === -1 && indexOfAddingOrSubtraction > -1) {
+      const operator = actionArray[indexOfAddingOrSubtraction];
+      const numOne = actionArray[--indexOfAddingOrSubtraction];
+      const lowestIndex = indexOfAddingOrSubtraction;
+      const numTwo = actionArray[(indexOfAddingOrSubtraction += 2)];
+      const highestIndex = indexOfAddingOrSubtraction;
+      const result = calculateOperators(operator, [numOne, numTwo]);
+      replaceInArray(actionArray, lowestIndex, highestIndex, result);
+    }
+  } while (actionArray.length > 1);
+
+  return actionArray[0];
+}
+
+function replaceInArray(array, lowestIndex, highestIndex, value) {
+  const deleteCount = highestIndex - lowestIndex + 1;
+  return array.splice(lowestIndex, deleteCount, value);
+}
+
+function calculateOperators(operator, numbers) {
+  switch (operator) {
+    case "+":
+      return +numbers[0] + +numbers[1];
+    case "-":
+      return +numbers[0] - +numbers[1];
+    case "÷":
+      return +numbers[0] / +numbers[1];
+    case "x":
+      return +numbers[0] * +numbers[1];
+  }
+}
+
+function calculateResult() {
+  const simpleArray = calculatesActionsInsideTheBrackets(actionsArray);
+ 
+  const finalResult = findOrderOfOperatorsThenCalculate(simpleArray);
+  
+  return finalResult;
+}
+
+function showResult() {
+  const result = calculateResult();
 }
