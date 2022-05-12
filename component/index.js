@@ -33,7 +33,6 @@ removeEl.addEventListener("click", remove);
 calculateResultEl.addEventListener("click", showResult);
 // functions
 
-
 function finedLastIndexAndItem() {
   lastIndexOfActionsArray = actionsArray.length - 1;
   lastItemOfActionsArray = actionsArray[lastIndexOfActionsArray];
@@ -175,6 +174,7 @@ function clear() {
   lastItemOfActionsArray = null;
   bracketLeft = true;
   bracketRight = false;
+  resultEl.textContent = 0;
 
   calculatesEl.classList.add("hidden");
 }
