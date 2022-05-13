@@ -1,6 +1,7 @@
 import { switcherTheme } from "./switcherTheme.js";
 import { onloadThemeChecker } from "./onloadThemeChecker.js";
 import { calculateOperators } from "./calculateOperators.js";
+import { replaceInArray } from "./replaceInArray.js";
 // elements
 const switcherEl = document.getElementById("switcher");
 const actionsEl = document.querySelectorAll(".actions");
@@ -347,10 +348,7 @@ function findOrderOfOperatorsThenCalculate(array = []) {
   return actionArray[0];
 }
 
-function replaceInArray(array, lowestIndex, highestIndex, value) {
-  const deleteCount = highestIndex - lowestIndex + 1;
-  return array.splice(lowestIndex, deleteCount, value);
-}
+
 
 
 
