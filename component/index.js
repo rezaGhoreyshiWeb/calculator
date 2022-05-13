@@ -2,6 +2,7 @@ import { switcherTheme } from "./switcherTheme.js";
 import { onloadThemeChecker } from "./onloadThemeChecker.js";
 import { replaceInArray } from "./replaceInArray.js";
 import { findOrderOfOperatorsThenCalculate } from "./findOrderOfOperatorsThenCalculate.js";
+import { calculatesActionsInsideTheBrackets } from "./calculatesActionsInsideTheBrackets.js";
 // elements
 const switcherEl = document.getElementById("switcher");
 const actionsEl = document.querySelectorAll(".actions");
@@ -17,7 +18,7 @@ let bracketRight = false;
 let removeAction = false;
 let lastIndexOfActionsArray;
 let lastItemOfActionsArray;
-let actionsArray = [];
+export let actionsArray = [];
 let actionsHTMLArray = [];
 
 // events
@@ -120,7 +121,7 @@ function actionsChecker(value) {
   }
 }
 
-function showActions() {
+export function showActions() {
   finedLastIndexAndItem();
   const lastHtmlItem = actionsHTMLArray[actionsHTMLArray.length - 1];
   let HTMLObj;
@@ -224,95 +225,6 @@ function remove() {
   actionsHTMLArray.pop();
   showActions();
 }
-
-function findAllBracketsIndexes() {
-  const bracketsIndex = [];
-  actionsArray.forEach((item, index) => {
-    if (item === "(" || item === ")") {
-      bracketsIndex.push(index);
-    }
-  });
-  return {
-    hasBracket: bracketsIndex.length > 0 ? true : false,
-    isOdd: bracketsIndex.length % 2 != 0,
-    bracketsIndex,
-  };
-}
-
-function calculatesActionsInsideTheBrackets(array) {
-  let copyActionsArray;
-  let bracketIndexInfo = findAllBracketsIndexes();
-  if (!bracketIndexInfo.hasBracket) return [...array];
-  if (bracketIndexInfo.hasBracket) {
-    let bracketsIndex;
-    const bracketsIndexesSeparate = [];
-    let bracketsObjs = [];
-
-    if (bracketIndexInfo.isOdd) {
-      actionsArray.push(")");
-      showActions();
-      bracketIndexInfo = findAllBracketsIndexes();
-    }
-    bracketsIndex = bracketIndexInfo.bracketsIndex;
-
-    if (bracketsIndex.length > 2) {
-      // separate the pair indexes
-      for (let i = 0; i < bracketsIndex.length; i += 2) {
-        let index = i;
-        const lowestIndex = bracketsIndex[index];
-        const highestIndex = bracketsIndex[++index];
-        bracketsIndexesSeparate.push([lowestIndex, highestIndex]);
-      }
-      // get the actions inside the bracket and create the obj of them
-      bracketsIndexesSeparate.forEach((item) => {
-        const obj = {
-          lowestIndex: item[0],
-          highestIndex: item[1],
-          action: actionsArray.slice(++item[0], item[1]),
-        };
-
-        bracketsObjs.push(obj);
-      });
-    } else {
-      const obj = {
-        lowestIndex: bracketsIndex[0],
-        highestIndex: bracketsIndex[1],
-        action: actionsArray.slice(++bracketsIndex[0], bracketsIndex[1]),
-      };
-      bracketsObjs.push(obj);
-    }
-
-    // change the obj and get the result of actions
-    bracketsObjs = bracketsObjs.map((obj) => {
-      return {
-        lowestIndex: obj.lowestIndex,
-        highestIndex: obj.highestIndex,
-        result: findOrderOfOperatorsThenCalculate(obj.action),
-      };
-    });
-
-    // make a copy of action array and replace the results of brackets
-    copyActionsArray = [...array];
-    // we reverse it and start from the end of arr to don't change the indexes
-    bracketsObjs = bracketsObjs.reverse();
-    // replace array with results of brackets
-    bracketsObjs.forEach((obj) => {
-      replaceInArray(
-        copyActionsArray,
-        obj.lowestIndex,
-        obj.highestIndex,
-        obj.result
-      );
-    });
-
-    return copyActionsArray;
-  }
-}
-
-
-
-
-
 
 function calculateResult() {
   const simpleArray = calculatesActionsInsideTheBrackets(actionsArray);
