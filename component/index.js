@@ -33,15 +33,9 @@ window.addEventListener("load", onloadThemeChecker);
 actionsEl.forEach((el) =>
   el.addEventListener("click", (e) => {
     const value = e.target.dataset.value ?? e.target.textContent.trim();
-
-    actionsChecker(value, globalVariablesObj);
+    actionsChecker(value);
   })
 );
-clearEl.addEventListener("click", () => clear(globalVariablesObj));
-removeEl.addEventListener("click", () => remove(globalVariablesObj));
-calculateResultEl.addEventListener("click", () =>
-  showResult(globalVariablesObj)
-);
-
-
-
+clearEl.addEventListener("click", clear);
+removeEl.addEventListener("click", remove);
+calculateResultEl.addEventListener("click", showResult);

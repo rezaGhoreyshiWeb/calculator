@@ -2,7 +2,7 @@ import { globalVariablesObj } from "./index.js";
 import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
 
 export function showActions() {
-  finedLastIndexAndItem(globalVariablesObj);
+  finedLastIndexAndItem();
   const lastHtmlItem =
     globalVariablesObj.actionsHTMLArray[
       globalVariablesObj.actionsHTMLArray.length - 1

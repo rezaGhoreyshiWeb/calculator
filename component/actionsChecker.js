@@ -1,7 +1,10 @@
 import { showActions } from "./showActions.js";
 import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
-export function actionsChecker(value, globalVariablesObj) {
-  finedLastIndexAndItem(globalVariablesObj);
+import { globalVariablesObj } from "./index.js";
+
+
+export function actionsChecker(value) {
+  finedLastIndexAndItem();
   globalVariablesObj.removeAction = false;
 
   // bracket check
@@ -15,7 +18,7 @@ export function actionsChecker(value, globalVariablesObj) {
       globalVariablesObj.actionsArray.push(")");
       globalVariablesObj.bracketRight = false;
       globalVariablesObj.bracketLeft = true;
-      showActions(globalVariablesObj);
+      showActions();
 
       return;
     }
@@ -27,7 +30,7 @@ export function actionsChecker(value, globalVariablesObj) {
         globalVariablesObj.actionsArray.push("(");
         globalVariablesObj.bracketLeft = false;
         globalVariablesObj.bracketRight = true;
-        showActions(globalVariablesObj);
+        showActions();
       }
       return;
     }
@@ -41,12 +44,12 @@ export function actionsChecker(value, globalVariablesObj) {
       globalVariablesObj.actionsArray[
         globalVariablesObj.lastIndexOfActionsArray
       ] = globalVariablesObj.lastItemOfActionsArray + value;
-      showActions(globalVariablesObj);
+      showActions();
 
       return;
     }
     globalVariablesObj.actionsArray.push(value);
-    showActions(globalVariablesObj);
+    showActions();
 
     return;
   }
@@ -62,7 +65,7 @@ export function actionsChecker(value, globalVariablesObj) {
       globalVariablesObj.actionsArray[
         globalVariablesObj.lastIndexOfActionsArray
       ] = globalVariablesObj.lastItemOfActionsArray + value;
-      showActions(globalVariablesObj);
+      showActions();
 
       return;
     }
@@ -74,14 +77,14 @@ export function actionsChecker(value, globalVariablesObj) {
       globalVariablesObj.actionsArray[
         globalVariablesObj.lastIndexOfActionsArray
       ] = globalVariablesObj.lastItemOfActionsArray.slice(1);
-      showActions(globalVariablesObj);
+      showActions();
 
       return;
     }
     globalVariablesObj.actionsArray[
       globalVariablesObj.lastIndexOfActionsArray
     ] = "-" + globalVariablesObj.lastItemOfActionsArray;
-    showActions(globalVariablesObj);
+    showActions();
 
     return;
   }
@@ -92,7 +95,7 @@ export function actionsChecker(value, globalVariablesObj) {
     globalVariablesObj.lastItemOfActionsArray === ")"
   ) {
     globalVariablesObj.actionsArray.push(value);
-    showActions(globalVariablesObj);
+    showActions();
     return;
   }
 }

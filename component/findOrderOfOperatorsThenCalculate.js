@@ -1,5 +1,6 @@
 import { calculateOperators } from "./calculateOperators.js";
 import { replaceInArray } from "./replaceInArray.js";
+
 export function findOrderOfOperatorsThenCalculate(array = []) {
   let actionArray = array;
   let indexOfMultiplyOrDivide;

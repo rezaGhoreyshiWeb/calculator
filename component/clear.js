@@ -1,4 +1,6 @@
-export function clear(globalVariablesObj) {
+import { globalVariablesObj } from "./index.js";
+
+export function clear() {
   globalVariablesObj.actionsArray = [];
   globalVariablesObj.actionsHTMLArray = [];
   globalVariablesObj.removeAction = false;

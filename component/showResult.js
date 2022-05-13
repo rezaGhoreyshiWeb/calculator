@@ -1,5 +1,7 @@
 import { calculateResult } from "./calculateResult.js";
-export function showResult(globalVariablesObj) {
-  const result = calculateResult(globalVariablesObj);
+import { globalVariablesObj } from "./index.js";
+
+export function showResult() {
+  const result = calculateResult();
   globalVariablesObj.resultEl.textContent = result;
 }
