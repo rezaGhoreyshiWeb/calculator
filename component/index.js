@@ -1,5 +1,6 @@
 import { switcherTheme } from "./switcherTheme.js";
 import { onloadThemeChecker } from "./onloadThemeChecker.js";
+import { calculateOperators } from "./calculateOperators.js";
 // elements
 const switcherEl = document.getElementById("switcher");
 const actionsEl = document.querySelectorAll(".actions");
@@ -351,18 +352,7 @@ function replaceInArray(array, lowestIndex, highestIndex, value) {
   return array.splice(lowestIndex, deleteCount, value);
 }
 
-function calculateOperators(operator, numbers) {
-  switch (operator) {
-    case "+":
-      return +numbers[0] + +numbers[1];
-    case "-":
-      return +numbers[0] - +numbers[1];
-    case "÷":
-      return +numbers[0] / +numbers[1];
-    case "x":
-      return +numbers[0] * +numbers[1];
-  }
-}
+
 
 function calculateResult() {
   const simpleArray = calculatesActionsInsideTheBrackets(actionsArray);
