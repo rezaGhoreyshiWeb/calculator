@@ -3,6 +3,8 @@ import { onloadThemeChecker } from "./onloadThemeChecker.js";
 import { replaceInArray } from "./replaceInArray.js";
 import { findOrderOfOperatorsThenCalculate } from "./findOrderOfOperatorsThenCalculate.js";
 import { calculatesActionsInsideTheBrackets } from "./calculatesActionsInsideTheBrackets.js";
+import { remove } from "./remove.js";
+
 // elements
 const switcherEl = document.getElementById("switcher");
 const actionsEl = document.querySelectorAll(".actions");
@@ -13,12 +15,13 @@ const calculateResultEl = document.getElementById("calculate-result");
 const resultEl = document.getElementById("result");
 
 // declared variables
+
 let bracketLeft = true;
 let bracketRight = false;
 let removeAction = false;
 let lastIndexOfActionsArray;
 let lastItemOfActionsArray;
-export let actionsArray = [];
+let actionsArray = [];
 let actionsHTMLArray = [];
 
 // events
@@ -32,8 +35,19 @@ actionsEl.forEach((el) =>
   })
 );
 clearEl.addEventListener("click", clear);
-removeEl.addEventListener("click", remove);
+removeEl.addEventListener("click", () =>
+  remove(
+    actionsArray,
+    finedLastIndexAndItem,
+    removeAction,
+    lastItemOfActionsArray,
+    actionsHTMLArray,
+    bracketLeft,
+    bracketRight
+  )
+);
 calculateResultEl.addEventListener("click", showResult);
+
 // functions
 
 function finedLastIndexAndItem() {
@@ -180,50 +194,6 @@ function clear() {
   resultEl.textContent = 0;
 
   calculatesEl.classList.add("hidden");
-}
-
-function remove() {
-  finedLastIndexAndItem();
-  removeAction = true;
-  if (!isNaN(lastItemOfActionsArray)) {
-    let numArray = lastItemOfActionsArray.split("");
-    if (numArray.length > 1) {
-      numArray.pop();
-      actionsArray.pop();
-      actionsArray.push(numArray.join(""));
-      showActions();
-
-      return;
-    } else {
-      actionsArray.pop();
-      actionsHTMLArray.pop();
-      showActions();
-
-      return;
-    }
-  }
-  if (lastItemOfActionsArray === "(") {
-    bracketLeft = true;
-    bracketRight = false;
-    actionsArray.pop();
-    actionsHTMLArray.pop();
-    showActions();
-
-    return;
-  }
-  if (lastItemOfActionsArray === ")") {
-    bracketLeft = false;
-    bracketRight = true;
-    actionsArray.pop();
-    actionsHTMLArray.pop();
-    showActions();
-
-    return;
-  }
-
-  actionsArray.pop();
-  actionsHTMLArray.pop();
-  showActions();
 }
 
 function calculateResult() {
