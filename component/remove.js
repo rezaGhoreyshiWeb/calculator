@@ -1,11 +1,8 @@
 import { showActions } from "./index.js";
+import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
 
-export function remove(
-  globalVariablesObj,
-  finedLastIndexAndItem,
-  
-) {
-  finedLastIndexAndItem();
+export function remove(globalVariablesObj) {
+  finedLastIndexAndItem(globalVariablesObj);
   globalVariablesObj.removeAction = true;
   if (!isNaN(globalVariablesObj.lastItemOfActionsArray)) {
     let numArray = globalVariablesObj.lastItemOfActionsArray.split("");

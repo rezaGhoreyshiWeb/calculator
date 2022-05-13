@@ -4,6 +4,7 @@ import { replaceInArray } from "./replaceInArray.js";
 import { findOrderOfOperatorsThenCalculate } from "./findOrderOfOperatorsThenCalculate.js";
 import { calculatesActionsInsideTheBrackets } from "./calculatesActionsInsideTheBrackets.js";
 import { remove } from "./remove.js";
+import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
 
 // elements
 const switcherEl = document.getElementById("switcher");
@@ -36,22 +37,13 @@ actionsEl.forEach((el) =>
   })
 );
 clearEl.addEventListener("click", clear);
-removeEl.addEventListener("click", () =>
-  remove(globalVariablesObj, finedLastIndexAndItem)
-);
+removeEl.addEventListener("click", () => remove(globalVariablesObj));
 calculateResultEl.addEventListener("click", showResult);
 
 // functions
 
-function finedLastIndexAndItem() {
-  globalVariablesObj.lastIndexOfActionsArray =
-    globalVariablesObj.actionsArray.length - 1;
-  globalVariablesObj.lastItemOfActionsArray =
-    globalVariablesObj.actionsArray[globalVariablesObj.lastIndexOfActionsArray];
-}
-
 function actionsChecker(value) {
-  finedLastIndexAndItem();
+  finedLastIndexAndItem(globalVariablesObj);
   globalVariablesObj.removeAction = false;
 
   // bracket check
@@ -148,7 +140,7 @@ function actionsChecker(value) {
 }
 
 export function showActions() {
-  finedLastIndexAndItem();
+  finedLastIndexAndItem(globalVariablesObj);
   const lastHtmlItem =
     globalVariablesObj.actionsHTMLArray[
       globalVariablesObj.actionsHTMLArray.length - 1
