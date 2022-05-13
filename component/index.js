@@ -6,6 +6,7 @@ import { calculatesActionsInsideTheBrackets } from "./calculatesActionsInsideThe
 import { remove } from "./remove.js";
 import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
 import { clear } from "./clear.js";
+import { showResult } from "./showResult.js";
 
 // elements
 const switcherEl = document.getElementById("switcher");
@@ -41,7 +42,9 @@ actionsEl.forEach((el) =>
 );
 clearEl.addEventListener("click", () => clear(globalVariablesObj));
 removeEl.addEventListener("click", () => remove(globalVariablesObj));
-calculateResultEl.addEventListener("click", showResult);
+calculateResultEl.addEventListener("click", () =>
+  showResult(globalVariablesObj)
+);
 
 // functions
 
@@ -201,9 +204,4 @@ function calculateResult() {
   const finalResult = findOrderOfOperatorsThenCalculate(simpleArray);
 
   return finalResult;
-}
-
-function showResult() {
-  const result = calculateResult();
-  globalVariablesObj.resultEl.textContent = result;
 }
