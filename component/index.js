@@ -5,6 +5,7 @@ import { findOrderOfOperatorsThenCalculate } from "./findOrderOfOperatorsThenCal
 import { calculatesActionsInsideTheBrackets } from "./calculatesActionsInsideTheBrackets.js";
 import { remove } from "./remove.js";
 import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
+import { clear } from "./clear.js";
 
 // elements
 const switcherEl = document.getElementById("switcher");
@@ -24,6 +25,8 @@ const globalVariablesObj = {
   lastItemOfActionsArray: null,
   actionsArray: [],
   actionsHTMLArray: [],
+  resultEl,
+  calculatesEl,
 };
 
 // events
@@ -36,7 +39,7 @@ actionsEl.forEach((el) =>
     actionsChecker(value);
   })
 );
-clearEl.addEventListener("click", clear);
+clearEl.addEventListener("click", () => clear(globalVariablesObj));
 removeEl.addEventListener("click", () => remove(globalVariablesObj));
 calculateResultEl.addEventListener("click", showResult);
 
@@ -190,19 +193,6 @@ export function showActions() {
   });
 }
 
-function clear() {
-  globalVariablesObj.actionsArray = [];
-  globalVariablesObj.actionsHTMLArray = [];
-  globalVariablesObj.removeAction = false;
-  globalVariablesObj.lastIndexOfActionsArray = null;
-  globalVariablesObj.lastItemOfActionsArray = null;
-  globalVariablesObj.bracketLeft = true;
-  globalVariablesObj.bracketRight = false;
-  resultEl.textContent = 0;
-
-  calculatesEl.classList.add("hidden");
-}
-
 function calculateResult() {
   const simpleArray = calculatesActionsInsideTheBrackets(
     globalVariablesObj.actionsArray
@@ -215,5 +205,5 @@ function calculateResult() {
 
 function showResult() {
   const result = calculateResult();
-  resultEl.textContent = result;
+  globalVariablesObj.resultEl.textContent = result;
 }
