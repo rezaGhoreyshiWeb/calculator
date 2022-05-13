@@ -1,8 +1,5 @@
 import { switcherTheme } from "./switcherTheme.js";
 import { onloadThemeChecker } from "./onloadThemeChecker.js";
-import { replaceInArray } from "./replaceInArray.js";
-import { findOrderOfOperatorsThenCalculate } from "./findOrderOfOperatorsThenCalculate.js";
-import { calculatesActionsInsideTheBrackets } from "./calculatesActionsInsideTheBrackets.js";
 import { remove } from "./remove.js";
 import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
 import { clear } from "./clear.js";
@@ -196,12 +193,4 @@ export function showActions() {
   });
 }
 
-function calculateResult() {
-  const simpleArray = calculatesActionsInsideTheBrackets(
-    globalVariablesObj.actionsArray
-  );
 
-  const finalResult = findOrderOfOperatorsThenCalculate(simpleArray);
-
-  return finalResult;
-}
