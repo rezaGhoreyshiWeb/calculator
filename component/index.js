@@ -15,14 +15,15 @@ const calculateResultEl = document.getElementById("calculate-result");
 const resultEl = document.getElementById("result");
 
 // declared variables
-
-let bracketLeft = true;
-let bracketRight = false;
-let removeAction = false;
-let lastIndexOfActionsArray;
-let lastItemOfActionsArray;
-let actionsArray = [];
-let actionsHTMLArray = [];
+const globalVariablesObj = {
+  bracketLeft: true,
+  bracketRight: false,
+  removeAction: false,
+  lastIndexOfActionsArray: null,
+  lastItemOfActionsArray: null,
+  actionsArray: [],
+  actionsHTMLArray: [],
+};
 
 // events
 switcherEl.addEventListener("click", switcherTheme);
@@ -36,49 +37,46 @@ actionsEl.forEach((el) =>
 );
 clearEl.addEventListener("click", clear);
 removeEl.addEventListener("click", () =>
-  remove(
-    actionsArray,
-    finedLastIndexAndItem,
-    removeAction,
-    lastItemOfActionsArray,
-    actionsHTMLArray,
-    bracketLeft,
-    bracketRight
-  )
+  remove(globalVariablesObj, finedLastIndexAndItem)
 );
 calculateResultEl.addEventListener("click", showResult);
 
 // functions
 
 function finedLastIndexAndItem() {
-  lastIndexOfActionsArray = actionsArray.length - 1;
-  lastItemOfActionsArray = actionsArray[lastIndexOfActionsArray];
+  globalVariablesObj.lastIndexOfActionsArray =
+    globalVariablesObj.actionsArray.length - 1;
+  globalVariablesObj.lastItemOfActionsArray =
+    globalVariablesObj.actionsArray[globalVariablesObj.lastIndexOfActionsArray];
 }
 
 function actionsChecker(value) {
   finedLastIndexAndItem();
-  removeAction = false;
+  globalVariablesObj.removeAction = false;
 
   // bracket check
   if (value.includes("(")) {
-    if (lastItemOfActionsArray === ")") return;
+    if (globalVariablesObj.lastItemOfActionsArray === ")") return;
     if (
-      bracketRight &&
-      lastItemOfActionsArray !== "(" &&
-      !isNaN(lastItemOfActionsArray)
+      globalVariablesObj.bracketRight &&
+      globalVariablesObj.lastItemOfActionsArray !== "(" &&
+      !isNaN(globalVariablesObj.lastItemOfActionsArray)
     ) {
-      actionsArray.push(")");
-      bracketRight = false;
-      bracketLeft = true;
+      globalVariablesObj.actionsArray.push(")");
+      globalVariablesObj.bracketRight = false;
+      globalVariablesObj.bracketLeft = true;
       showActions();
 
       return;
     }
-    if (bracketLeft) {
-      if (actionsArray.length === 0 || isNaN(lastItemOfActionsArray)) {
-        actionsArray.push("(");
-        bracketLeft = false;
-        bracketRight = true;
+    if (globalVariablesObj.bracketLeft) {
+      if (
+        globalVariablesObj.actionsArray.length === 0 ||
+        isNaN(globalVariablesObj.lastItemOfActionsArray)
+      ) {
+        globalVariablesObj.actionsArray.push("(");
+        globalVariablesObj.bracketLeft = false;
+        globalVariablesObj.bracketRight = true;
         showActions();
       }
       return;
@@ -87,26 +85,33 @@ function actionsChecker(value) {
   // number check
   if (!isNaN(value)) {
     if (
-      !isNaN(lastItemOfActionsArray) ||
-      lastItemOfActionsArray?.includes(".")
+      !isNaN(globalVariablesObj.lastItemOfActionsArray) ||
+      globalVariablesObj.lastItemOfActionsArray?.includes(".")
     ) {
-      actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
+      globalVariablesObj.actionsArray[
+        globalVariablesObj.lastIndexOfActionsArray
+      ] = globalVariablesObj.lastItemOfActionsArray + value;
       showActions();
 
       return;
     }
-    actionsArray.push(value);
+    globalVariablesObj.actionsArray.push(value);
     showActions();
 
     return;
   }
   // decimal check
   if (value === ".") {
-    if (lastItemOfActionsArray.includes(".")) {
+    if (globalVariablesObj.lastItemOfActionsArray.includes(".")) {
       return;
     }
-    if (!isNaN(lastItemOfActionsArray) && lastItemOfActionsArray) {
-      actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray + value;
+    if (
+      !isNaN(globalVariablesObj.lastItemOfActionsArray) &&
+      globalVariablesObj.lastItemOfActionsArray
+    ) {
+      globalVariablesObj.actionsArray[
+        globalVariablesObj.lastIndexOfActionsArray
+      ] = globalVariablesObj.lastItemOfActionsArray + value;
       showActions();
 
       return;
@@ -115,21 +120,28 @@ function actionsChecker(value) {
 
   // number sign check
   if (value === "+/-") {
-    if (lastItemOfActionsArray.startsWith("-")) {
-      actionsArray[lastIndexOfActionsArray] = lastItemOfActionsArray.slice(1);
+    if (globalVariablesObj.lastItemOfActionsArray.startsWith("-")) {
+      globalVariablesObj.actionsArray[
+        globalVariablesObj.lastIndexOfActionsArray
+      ] = globalVariablesObj.lastItemOfActionsArray.slice(1);
       showActions();
 
       return;
     }
-    actionsArray[lastIndexOfActionsArray] = "-" + lastItemOfActionsArray;
+    globalVariablesObj.actionsArray[
+      globalVariablesObj.lastIndexOfActionsArray
+    ] = "-" + globalVariablesObj.lastItemOfActionsArray;
     showActions();
 
     return;
   }
 
   // for any other actions
-  if (!isNaN(lastItemOfActionsArray) || lastItemOfActionsArray === ")") {
-    actionsArray.push(value);
+  if (
+    !isNaN(globalVariablesObj.lastItemOfActionsArray) ||
+    globalVariablesObj.lastItemOfActionsArray === ")"
+  ) {
+    globalVariablesObj.actionsArray.push(value);
     showActions();
     return;
   }
@@ -137,67 +149,72 @@ function actionsChecker(value) {
 
 export function showActions() {
   finedLastIndexAndItem();
-  const lastHtmlItem = actionsHTMLArray[actionsHTMLArray.length - 1];
+  const lastHtmlItem =
+    globalVariablesObj.actionsHTMLArray[
+      globalVariablesObj.actionsHTMLArray.length - 1
+    ];
   let HTMLObj;
 
   if (calculatesEl.classList.contains("hidden")) {
     calculatesEl.classList.remove("hidden");
   }
-  if (actionsArray.length === 0) {
+  if (globalVariablesObj.actionsArray.length === 0) {
     calculatesEl.classList.add("hidden");
     return;
   }
 
-  if (!isNaN(lastItemOfActionsArray)) {
+  if (!isNaN(globalVariablesObj.lastItemOfActionsArray)) {
     if (lastHtmlItem?.isNum) {
-      actionsHTMLArray.pop();
+      globalVariablesObj.actionsHTMLArray.pop();
     }
     HTMLObj = {
       isNum: true,
       html: `
-    <span class="font-sans text-neutral-700 dark:text-gray-50">${lastItemOfActionsArray}</span
+    <span class="font-sans text-neutral-700 dark:text-gray-50">${globalVariablesObj.lastItemOfActionsArray}</span
     `,
     };
   }
 
-  if (isNaN(lastItemOfActionsArray)) {
-    if (removeAction) {
+  if (isNaN(globalVariablesObj.lastItemOfActionsArray)) {
+    if (globalVariablesObj.removeAction) {
       HTMLObj = null;
     } else {
       HTMLObj = {
         isNum: false,
         html: `
-        <span class="font-sans text-orange-400">${lastItemOfActionsArray}</span>
+        <span class="font-sans text-orange-400">${globalVariablesObj.lastItemOfActionsArray}</span>
         `,
       };
     }
   }
 
   if (HTMLObj) {
-    actionsHTMLArray.push(HTMLObj);
+    globalVariablesObj.actionsHTMLArray.push(HTMLObj);
   }
 
   calculatesEl.innerHTML = "";
-  actionsHTMLArray.forEach((item) => {
+  globalVariablesObj.actionsHTMLArray.forEach((item) => {
     calculatesEl.innerHTML += item.html;
   });
 }
 
 function clear() {
-  actionsArray = [];
-  actionsHTMLArray = [];
-  removeAction = false;
-  lastIndexOfActionsArray = null;
-  lastItemOfActionsArray = null;
-  bracketLeft = true;
-  bracketRight = false;
+  globalVariablesObj.actionsArray = [];
+  globalVariablesObj.actionsHTMLArray = [];
+  globalVariablesObj.removeAction = false;
+  globalVariablesObj.lastIndexOfActionsArray = null;
+  globalVariablesObj.lastItemOfActionsArray = null;
+  globalVariablesObj.bracketLeft = true;
+  globalVariablesObj.bracketRight = false;
   resultEl.textContent = 0;
 
   calculatesEl.classList.add("hidden");
 }
 
 function calculateResult() {
-  const simpleArray = calculatesActionsInsideTheBrackets(actionsArray);
+  const simpleArray = calculatesActionsInsideTheBrackets(
+    globalVariablesObj.actionsArray
+  );
 
   const finalResult = findOrderOfOperatorsThenCalculate(simpleArray);
 

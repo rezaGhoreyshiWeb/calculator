@@ -1,53 +1,49 @@
 import { showActions } from "./index.js";
 
 export function remove(
-  actionsArray,
+  globalVariablesObj,
   finedLastIndexAndItem,
-  removeAction,
-  lastItemOfActionsArray,
-  actionsHTMLArray,
-  bracketLeft,
-  bracketRight
+  
 ) {
   finedLastIndexAndItem();
-  removeAction = true;
-  if (!isNaN(lastItemOfActionsArray)) {
-    let numArray = lastItemOfActionsArray.split("");
+  globalVariablesObj.removeAction = true;
+  if (!isNaN(globalVariablesObj.lastItemOfActionsArray)) {
+    let numArray = globalVariablesObj.lastItemOfActionsArray.split("");
     if (numArray.length > 1) {
       numArray.pop();
-      actionsArray.pop();
-      actionsArray.push(numArray.join(""));
+      globalVariablesObj.actionsArray.pop();
+      globalVariablesObj.actionsArray.push(numArray.join(""));
       showActions();
 
       return;
     } else {
-      actionsArray.pop();
-      actionsHTMLArray.pop();
+      globalVariablesObj.actionsArray.pop();
+      globalVariablesObj.actionsHTMLArray.pop();
       showActions();
 
       return;
     }
   }
-  if (lastItemOfActionsArray === "(") {
-    bracketLeft = true;
-    bracketRight = false;
-    actionsArray.pop();
-    actionsHTMLArray.pop();
+  if (globalVariablesObj.lastItemOfActionsArray === "(") {
+    globalVariablesObj.bracketLeft = true;
+    globalVariablesObj.bracketRight = false;
+    globalVariablesObj.actionsArray.pop();
+    globalVariablesObj.actionsHTMLArray.pop();
     showActions();
 
     return;
   }
-  if (lastItemOfActionsArray === ")") {
-    bracketLeft = false;
-    bracketRight = true;
-    actionsArray.pop();
-    actionsHTMLArray.pop();
+  if (globalVariablesObj.lastItemOfActionsArray === ")") {
+    globalVariablesObj.bracketLeft = false;
+    globalVariablesObj.bracketRight = true;
+    globalVariablesObj.actionsArray.pop();
+    globalVariablesObj.actionsHTMLArray.pop();
     showActions();
 
     return;
   }
 
-  actionsArray.pop();
-  actionsHTMLArray.pop();
+  globalVariablesObj.actionsArray.pop();
+  globalVariablesObj.actionsHTMLArray.pop();
   showActions();
 }
