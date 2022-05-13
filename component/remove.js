@@ -1,4 +1,4 @@
-import { showActions } from "./index.js";
+import { showActions } from "./showActions.js";
 import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
 
 export function remove(globalVariablesObj) {
@@ -16,7 +16,7 @@ export function remove(globalVariablesObj) {
     } else {
       globalVariablesObj.actionsArray.pop();
       globalVariablesObj.actionsHTMLArray.pop();
-      showActions();
+      showActions(globalVariablesObj);
 
       return;
     }

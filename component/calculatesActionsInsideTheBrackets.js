@@ -1,7 +1,7 @@
 import { findOrderOfOperatorsThenCalculate } from "./findOrderOfOperatorsThenCalculate.js";
 import { replaceInArray } from "./replaceInArray.js";
 import { findAllBracketsIndexes } from "./findAllBracketsIndexes.js";
-import { showActions } from "./index.js";
+import { showActions } from "./showActions.js";
 
 export function calculatesActionsInsideTheBrackets(actionsArray) {
   let copyActionsArray;

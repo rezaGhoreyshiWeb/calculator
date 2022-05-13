@@ -1,6 +1,8 @@
 import { findOrderOfOperatorsThenCalculate } from "./findOrderOfOperatorsThenCalculate.js";
+import { calculatesActionsInsideTheBrackets } from "./calculatesActionsInsideTheBrackets.js";
+import { globalVariablesObj } from "./index.js";
 
-export function calculateResult(globalVariablesObj) {
+export function calculateResult() {
   const simpleArray = calculatesActionsInsideTheBrackets(
     globalVariablesObj.actionsArray
   );

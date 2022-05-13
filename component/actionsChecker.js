@@ -1,4 +1,4 @@
-import { showActions } from "./index.js";
+import { showActions } from "./showActions.js";
 import { finedLastIndexAndItem } from "./finedLastIndexAndItem.js";
 export function actionsChecker(value, globalVariablesObj) {
   finedLastIndexAndItem(globalVariablesObj);
